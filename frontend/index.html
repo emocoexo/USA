@@ -1,0 +1,638 @@
+<!-- Frontend: Main Page untuk Paste Link & Create Storyboard -->
+<!-- HTML/React Component untuk user interface -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USA - UGC Video Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .main-card {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      margin-bottom: 30px;
+    }
+
+    .input-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-section input {
+      flex: 1;
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    .input-section input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .input-section button {
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.2s;
+      font-weight: 600;
+    }
+
+    .input-section button:hover {
+      transform: translateY(-2px);
+    }
+
+    .input-section button:active {
+      transform: translateY(0);
+    }
+
+    .platforms {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+      justify-content: center;
+    }
+
+    .platform-badge {
+      padding: 10px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .platform-badge.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .product-preview {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .product-image {
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f5f5f5;
+      aspect-ratio: 1;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-info h2 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .product-price {
+      font-size: 1.5em;
+      color: #667eea;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stars {
+      color: #ffc107;
+      font-size: 1.2em;
+    }
+
+    .product-description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .benefits {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .benefits h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .benefit-item:last-child {
+      border-bottom: none;
+    }
+
+    .benefit-item::before {
+      content: '✓';
+      color: #667eea;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .template-selector {
+      margin: 30px 0;
+    }
+
+    .template-selector h3 {
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      color: #333;
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .template-card {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .template-card:hover {
+      border-color: #667eea;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .template-card.selected {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .template-card h4 {
+      margin-bottom: 8px;
+      font-size: 1em;
+    }
+
+    .template-card p {
+      font-size: 0.85em;
+      opacity: 0.7;
+    }
+
+    .template-card.selected p {
+      opacity: 0.9;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #f5f5f5;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+
+      .product-preview {
+        grid-template-columns: 1fr;
+      }
+
+      .input-section {
+        flex-direction: column;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎬 USA - UGC Video Generator</h1>
+      <p>Buat video storyboard dari link Shopee/TikTok Shop dalam hitungan detik!</p>
+    </header>
+
+    <div class="main-card">
+      <!-- Step 1: Paste Link -->
+      <div class="input-section">
+        <input 
+          type="text" 
+          id="productUrl" 
+          placeholder="Paste link Shopee atau TikTok Shop di sini..."
+          onkeypress="handleKeyPress(event)"
+        >
+        <button onclick="scrapeProduct()">Scrape 🚀</button>
+      </div>
+
+      <!-- Platform Selection -->
+      <div class="platforms">
+        <div class="platform-badge active">🛍️ Shopee</div>
+        <div class="platform-badge">🎵 TikTok Shop</div>
+      </div>
+
+      <!-- Messages -->
+      <div class="error-message" id="errorMsg"></div>
+      <div class="success-message" id="successMsg"></div>
+
+      <!-- Loading -->
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Sedang scrape data produk...</p>
+      </div>
+
+      <!-- Product Preview -->
+      <div id="productPreview" style="display: none;">
+        <div class="product-preview">
+          <div class="product-image">
+            <img id="productImg" src="" alt="Product">
+          </div>
+
+          <div class="product-info">
+            <div>
+              <h2 id="productTitle">Product Title</h2>
+              <div class="product-price">
+                Rp <span id="productPrice">0</span>
+              </div>
+              <div class="product-rating">
+                <div class="stars">⭐ <span id="productRating">5</span>/5</div>
+                <span id="ratingCount">(0 reviews)</span>
+              </div>
+              <p class="product-description" id="productDesc"></p>
+            </div>
+
+            <!-- Benefits -->
+            <div class="benefits">
+              <h3>✨ Keuntungan Produk:</h3>
+              <div id="benefitsContainer"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Selection -->
+        <div class="template-selector">
+          <h3>Pilih Template Storyboard:</h3>
+          <p style="margin-bottom: 15px; color: #666;">
+            Suggested: <strong id="suggestedTemplate"></strong> 
+            (Confidence: <span id="confidence"></span>%)
+          </p>
+          <div class="template-grid" id="templateGrid"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="generatePreview()">
+            👁️ Preview Storyboard
+          </button>
+          <button class="btn btn-primary" onclick="generateVideo()">
+            🎥 Generate Video
+          </button>
+          <button class="btn btn-secondary" onclick="resetForm()">
+            🔄 Buat Lagi
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+    let selectedProduct = null;
+    let selectedTemplate = null;
+
+    // Handle Enter key
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        scrapeProduct();
+      }
+    }
+
+    // Scrape Product
+    async function scrapeProduct() {
+      const url = document.getElementById('productUrl').value.trim();
+      
+      if (!url) {
+        showError('Masukkan URL produk terlebih dahulu!');
+        return;
+      }
+
+      showLoading(true);
+      hideMessages();
+
+      try {
+        const response = await fetch(`${API_BASE}/storyboard/scrape`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productUrl: url })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to scrape product');
+        }
+
+        selectedProduct = data.data.product;
+        renderProductPreview(data.data);
+        showSuccess('Produk berhasil di-scrape! ✓');
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Render Product Preview
+    function renderProductPreview(data) {
+      const { product, suggestedTemplate, templateConfidence, benefits, allTemplates } = data;
+
+      // Product Info
+      document.getElementById('productTitle').textContent = product.title;
+      document.getElementById('productPrice').textContent = product.price.toLocaleString('id-ID');
+      document.getElementById('productRating').textContent = product.rating;
+      document.getElementById('ratingCount').textContent = `(${product.rating_count || 0} reviews)`;
+      document.getElementById('productDesc').textContent = product.description;
+      document.getElementById('productImg').src = product.image;
+
+      // Benefits
+      const benefitsHtml = benefits
+        .map(b => `<div class="benefit-item">${b}</div>`)
+        .join('');
+      document.getElementById('benefitsContainer').innerHTML = benefitsHtml;
+
+      // Suggested Template
+      document.getElementById('suggestedTemplate').textContent = suggestedTemplate.name;
+      document.getElementById('confidence').textContent = Math.round(templateConfidence * 100);
+
+      // Template Grid
+      const templateGrid = document.getElementById('templateGrid');
+      templateGrid.innerHTML = allTemplates
+        .map(template => `
+          <div class="template-card ${template.id === suggestedTemplate.id ? 'selected' : ''}" 
+               onclick="selectTemplate('${template.id}', this)">
+            <h4>${template.name}</h4>
+            <p>${template.frameCount} frames • ${template.duration}s</p>
+          </div>
+        `)
+        .join('');
+
+      selectedTemplate = suggestedTemplate.id;
+      document.getElementById('productPreview').style.display = 'block';
+    }
+
+    // Select Template
+    function selectTemplate(templateId, element) {
+      document.querySelectorAll('.template-card').forEach(el => {
+        el.classList.remove('selected');
+      });
+      element.classList.add('selected');
+      selectedTemplate = templateId;
+    }
+
+    // Generate Preview
+    async function generatePreview() {
+      if (!selectedProduct || !selectedTemplate) {
+        showError('Pilih template terlebih dahulu!');
+        return;
+      }
+
+      showLoading(true);
+
+      try {
+        const response = await fetch(`${API_BASE}/storyboard/preview`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productData: selectedProduct,
+            templateId: selectedTemplate
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
+
+        // Show preview modal or redirect to preview page
+        showSuccess('Preview siap! Redirecting...');
+        setTimeout(() => {
+          window.location.href = `/preview.html?templateId=${selectedTemplate}&productId=${selectedProduct.productId}`;
+        }, 1500);
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Generate Video
+    async function generateVideo() {
+      if (!selectedProduct || !selectedTemplate) {
+        showError('Pilih template terlebih dahulu!');
+        return;
+      }
+
+      showLoading(true);
+      showLoading(true);
+
+      try {
+        const response = await fetch(`${API_BASE}/storyboard/generate-video`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productData: selectedProduct,
+            templateId: selectedTemplate
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
+
+        showSuccess('Video generated! Redirecting ke editor...');
+        setTimeout(() => {
+          window.location.href = `/editor.html?videoPath=${encodeURIComponent(data.data.videoPath)}`;
+        }, 1500);
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Reset Form
+    function resetForm() {
+      document.getElementById('productUrl').value = '';
+      document.getElementById('productPreview').style.display = 'none';
+      selectedProduct = null;
+      selectedTemplate = null;
+      hideMessages();
+    }
+
+    // Helper Functions
+    function showLoading(show) {
+      document.getElementById('loading').style.display = show ? 'block' : 'none';
+    }
+
+    function hideMessages() {
+      document.getElementById('errorMsg').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'none';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById('successMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
